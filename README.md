@@ -37,9 +37,8 @@ No matter the HTTP protocol, the response will always looks like this :
 This values are included in REST schema.
 - `get`: represent the request for getting a resource or a list of resource
 - `post`: represent the request for creating a resource
-- `put`: represent the request for updating a resource
+- `put`: represent the request for updating a resource. If you send a `PATCH` request, the value of the `request` attribute should still be `PUT` as the comunity seems to accept both as the action of updating a resource. This rule is set up in order to keep the most consitency possible.
 - `delete`: represent the request for deleting a resource
-If you send a `PATCH` request, the value of the `request` attribute should still be `PUT` as the comunity seems to accept both as the action of updating a resource. This rule is set up in order to keep the most consitency possible.
 
 [back to summary](#summary)
 ### Possible values for the status attribute
