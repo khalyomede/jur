@@ -53,7 +53,7 @@ It can be anything that help the **end user** to know what happened of his initi
 #### Success message
 This should be as simple as possible, and inform the user that the resource have been successfuly altered.
 #### Fail message
-This should be as precise as possible, and inform the user that one of the values of his input request was wrong. The recommendation is not display the first error if multiple values are wrong, as the user will not read everything if you throw evey errors on him. Web experience should be fast, concise, and clear.
+This should be as precise as possible, and inform the user that one of the values of his input request was wrong. The recommendation is to display only the first error if multiple values are wrong, as the user will not read everything if you throw every errors. Web experience should be fast, concise, and clear.
 #### Error message
 Do not throw the exact database driver error or any other system error ! This practice is a huge security breach and could inform bad guys how your system works/is built. Simply display a general error. Here is a suggestion of general error to give your end-user : "an error occured while trying to <name of the action> your data".
 
