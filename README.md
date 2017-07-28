@@ -82,7 +82,8 @@ GET the information of the resource, and then DELETE it. You can then return the
 
 ## Advice on how to implement this standard
 - Use constants to define the different values of attributes : if you create your class, set some constants to help the end developper
-- Implement a parser : The rule of this parser should be strictly leaded by the presence of all the 5 attributes and their possible values. JCR has been made by thinking of the most uniform data possible, thus making the construction of a parser a breeze. Further version of this documentation should include a pseudo-code algorithm to help implement this parser.
+- Implement a parser : The rule of this parser should be strictly leaded by the presence of all the 5 attributes and their possible values. JCR has been made by thinking of the most uniform data possible, thus making the construction of a parser a breeze. Further version of this documentation should include a pseudo-code algorithm to help implement this parser
+- Real-life example : You can find a PHP example of implementation (a little bit hard if you do not do advanced PHP) but this really gives you good hints on how to implement this standard.
 
 [back to summary](#summary)
 ## Semantic Version ready
