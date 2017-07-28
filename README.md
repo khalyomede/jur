@@ -1,6 +1,8 @@
 # JUR
 JSON Uniform Response
 
+[![GitHub tag](https://img.shields.io/github/tag/khalyomede/jur.svg)]()
+
 ## Summary
 - [What is JUR](#what-is-jur)
 - [Standard](#standard)
