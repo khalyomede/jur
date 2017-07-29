@@ -9,7 +9,7 @@ JSON Uniform Response
 - [Advice on how to implement this standard](#advice-on-how-to-implement-this-standard)
 
 ## What is JUR
-JUR has been created to offers a uniform JSON response guideline. This comes from a needs to dispose a constantly same JSON response when getting a message from a JSON REST API. This is the main goal, but this standard can be used for any form of JSON response too. The objective is to let developper focus on things that value the most for them, and automatize or standardize the way they process a JSON response. Its form should always be the same, and developpers should quickly find the main information. They should not play hide and seek to find if an attribute "data" is set or not (for example). JUR large inspiration comes from JSend standard as it is one of the simplest yet performant standard. Unfortunately, the cons of this standard was mainly its consistency.
+JUR has been created to offers a uniform JSON response guideline. This comes from a needs to dispose a constantly same JSON response when getting a message from a JSON REST API. This is the main goal, but this standard can be used for any form of JSON response too. The objective is to let developper focus on things that value the most for them, and automatize or standardize the way they process a JSON response. Its form should always be the same, and developpers should quickly find the main information. The goal of this standard is not only to give the user the information they need, but also to help developers find how their API responded. They should not play hide and seek to find if an attribute "data" is set or not, nor doing complicated and useless computing to find how much time the API last for example. JUR large inspiration comes from JSend standard as it is one of the simplest yet performant standard. Unfortunately, the cons of this standard was mainly its consistency.
 
 [back to summary](#summary)
 ## Standard
@@ -19,6 +19,9 @@ No matter the HTTP protocol, the response will always looks like this :
 {
   "request": "update",
   "status": "success",  
+  "requested": "1501325303723",
+  "resolved": "1501325303980",
+  "elapsed": "257",
   "message": "the resource have successfully been saved",
   "code": 0,
   "data": [
@@ -47,6 +50,12 @@ This values are included in REST schema.
 - `error`: the request failed due to a server-side error (database outage, violation of a table constraint, ...)
 
 [back to summary](#summary)
+### Note on the requested attribute
+This represents, in **milliseconds**, the time when the server-side script begins to process the request. The best option to represent this value is to immediately create the variable responsible to log the current millisecond timstamp before any process (if possible).
+### Note on the resolved attribute
+This represents the time in **milliseconds** when the API is about to send the response back to the consumer system. This should be the last - 1 statement of your server-side code, right before the code that will send the response to the consumer back. A tips is given to make this the most relevant data possible in the [Advice on how to implement this standard](#advice-on-how-to-implement-this-standard) section to help you implement this.
+### Note on the elapsed attribute
+This represents the time in **milliseconds** the script last to process the request. It simply is the difference between the `requested` and the `resolved` milliseconds timestamps, as they wrap any process that has helped to get the excpected result or effect to the resource. A tips is given to automatically compute this data in the [Advice on how to implement this standard](#advice-on-how-to-implement-this-standard) section to help you simply implement this.
 ### Notes on the message attribute
 It can be anything that help the **end user** to know what happened of his initial request.
 #### Success message
@@ -84,6 +93,7 @@ GET the information of the resource, and then DELETE it. You can then return the
 - Use constants to define the different values of attributes : if you create your class, set some constants to help the end developper
 - Implement a parser : The rule of this parser should be strictly leaded by the presence of all the 5 attributes and their possible values. JCR has been made by thinking of the most uniform data possible, thus making the construction of a parser a breeze. Further version of this documentation should include a pseudo-code algorithm to help implement this parser
 - Real-life example : You can find a PHP example of implementation (a little bit hard if you do not do advanced PHP) but this really gives you good hints on how to implement this standard. You can find here : [https://github.com/khalyomede/php-jur/tree/master/src](https://github.com/khalyomede/php-jur/tree/master/src)
+- For the `resolved` attribute, you could make the class or the function that send back the response to automatically compute the millisecond timestamp, thus computing right after the `elapsed` value in milliseconds. This can be a good thing in term of Developer Experience. Further version of this documentation should include a pseudo-code algorithm to help you understand how to simply implement this.
 
 [back to summary](#summary)
 ## Semantic Version ready
