@@ -19,9 +19,9 @@ No matter the HTTP protocol, the response will always looks like this :
 {
   "request": "update",
   "status": "success",  
-  "requested": "1501325303723",
-  "resolved": "1501325303980",
-  "elapsed": "257",
+  "requested": 1501325303723,
+  "resolved": 1501325303980,
+  "elapsed": 257,
   "message": "the resource have successfully been saved",
   "code": 0,
   "data": [
