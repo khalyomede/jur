@@ -56,6 +56,8 @@ This represents, in **milliseconds**, the time when the server-side script begin
 This represents the time in **milliseconds** when the API is about to send the response back to the consumer system. This should be the last - 1 statement of your server-side code, right before the code that will send the response to the consumer back. A tips is given to make this the most relevant data possible in the [Advice on how to implement this standard](#advice-on-how-to-implement-this-standard) section to help you implement this.
 ### Note on the elapsed attribute
 This represents the time in **milliseconds** the script last to process the request. It simply is the difference between the `requested` and the `resolved` milliseconds timestamps, as they wrap any process that has helped to get the excpected result or effect to the resource. A tips is given to automatically compute this data in the [Advice on how to implement this standard](#advice-on-how-to-implement-this-standard) section to help you simply implement this.
+
+[back to summary](#summary)
 ### Notes on the message attribute
 It can be anything that help the **end user** to know what happened of his initial request.
 #### Success message
