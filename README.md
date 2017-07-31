@@ -25,14 +25,12 @@ No matter the HTTP protocol, the response will always looks like this :
   "elapsed": 257,
   "message": "the resource have successfully been saved",
   "code": 0,
-  "data": [
-    {
-      "firstName": "John",
-      "lastName": "Doe",
-      "createdAt": "2017-07-28 16:47:00",
-      "updatedAt": "2017-07-28 16:47:00"
-    }
-  ]
+  "data": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "createdAt": "2017-07-28 16:47:00",
+    "updatedAt": "2017-07-28 16:47:00"
+  }
 }
 ```
 
