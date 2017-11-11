@@ -108,7 +108,7 @@ GET the information of the resource, and then DELETE it. You can then return the
 | elapsed | processing request duration in milliseconds | integer | 919 |
 | message | request status to be delivered to the end user | string | "user John Doe have been successfully stored" |
 | code | request status code for the end developper | integer | 7, -1, 0 |
-| data | processed data for the end developper | string, integer, JSON object, array, boolean, null | { "firstName": "John", "lastName": "Doe" } |
+| data | processed data for the end developper | string, number, JSON object, array, boolean, null | { "firstName": "John", "lastName": "Doe" } |
 
 [back to summary](#summary)
 ## Semantic Version ready
