@@ -95,6 +95,49 @@ The time at which the request has been handled by the controller. Timestamp in *
 
 The time at which the request has been resolved by the controller. Timestamp in **microseconds**.
 
+## Real life example
+
+This example features:
+
+- Javascript: for the step of sending the request/consuming the response
+- Laravel (PHP): for the step of processing the request
+- khalyomede/jur (PHP): the package that help form the JUR response
+
+We are in the context of a task application, and the user is displaying the task list.
+
+- [1. Sending the request/consuming the response](1-sending-the-requestconsuming-the-response)
+- [2. Processing a request](2-processing-a-request)
+
+### 1. Sending the request/consuming the response
+
+```html
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/task', { method: 'GET' }).then(function(response) {
+      if( response.ok ) {
+        console.log(response.json().data);
+      }
+    });
+  });
+</script>
+```
+
+### 2. Processing a request
+
+```php
+namespace App\Http\Controllers;
+
+use App\Task;
+
+class TaskController extends Controller {
+  public function index(): string {
+    $response = jur()->issued()->request('get')->data( Task::all() );
+
+    return response()->json( $response->resolved()->toArray() );
+  }
+}
+```
+
 ## Tips
 
 - [Check for errors](#check-for-errors)
