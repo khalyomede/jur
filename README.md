@@ -68,18 +68,18 @@ This is the right place to inform the end user of what is happening with his req
 
 The user can be a developer, but also a non-developer like a customer in a shop website. So this message should be targeted to offer a good comprehension, **without** exposing sensible information about the server or any other critical data.
 
-### request
+#### request
 
 This is the attribute that saves the type of request that have been processed. This attribute can help developers in 2 ways:
 
 - verify its request have been understood by the server (if the developer intended to make a GET request, but the server ended up processing a PUT request, there is an issue)
 - help the front-end developer process the message regarding the type of request (styling, ...)
 
-### data
+#### data
 
 This is the attribute where all the necessary data to provide are stored. It can be set to null when there is no data to return, which is different than the absence of result (which would be an empty array/object).
 
-### debug
+#### debug
 
 This is the attribute designed for the consumer of the API. It let you know when the request has been issued and resolved according to the server, and how many time did the server took to resolve this request.
 
