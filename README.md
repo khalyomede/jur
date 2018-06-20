@@ -1,115 +1,165 @@
 # JUR
+
 JSON Uniform Response
 
 [![GitHub tag](https://img.shields.io/github/tag/khalyomede/jur.svg)]()
 
 ## Summary
+
 - [What is JUR](#what-is-jur)
 - [Standard](#standard)
-- [Attributes cheat sheat](#attributes-cheat-sheat)
-- [Advice on how to implement this standard](#advice-on-how-to-implement-this-standard)
+- [Real life example](#real-life-example)
+- [Tips](#tips)
+- [Attributes cheat sheet](#attributes-cheat-sheet)
+
+You are watching version 2, which supersedes the previous version. Version 1 is no longer maintened (you can still access it through the tag menu right above).
 
 ## What is JUR
-This is a set of guidelines to help make a JSON response system the most reliable and easy to use. The core concept is to provide a uniform response, no matter the protocol, nor the success or the error of the process.
 
-[back to summary](#summary)
+Json Uniform Response is my attempt at making the job of developers that consumes API easier by a set of defined rules to make the data retrieving task the same regardless of the nature of the data we are trying to fetch or alter. This might seems a little bit abstract said like this, so quickly jump into the [real life example](#real-life-example) if you need some real use cases.
+
+JUR is optimized for REST API that respond with JSON data.
+
 ## Standard
-### Uniform response
-No matter the HTTP protocol, the response will always looks like this :
+
+- [Overview](#overview)
+- [In-depth attributes explaination](#in-depth-attributes-explaination)
+
+### Overview
+
+No matter which endpoint you request, nor which type of HTTP request you make, this is what you will always have in response:
+
 ```json
+GET http://example.com/api/task
+
 {
-  "request": "update",
-  "status": "success",  
-  "requested": 1501325303723,
-  "resolved": 1501325303980,
-  "elapsed": 257,
-  "message": "the resource have successfully been saved",
-  "code": 0,
-  "data": {
-    "firstName": "John",
-    "lastName": "Doe",
-    "createdAt": "2017-07-28 16:47:00",
-    "updatedAt": "2017-07-28 16:47:00"
-  }
+  "message": null,
+  "request": "get",
+  "data": [
+    {
+      "id": 1,
+      "name": "Fix the :hover state of the submit button",
+      "updated_at": "2018-06-20T10:07:37+02:00"
+    },
+    {
+      "id": 2,
+      "name": "Add Youtube social icon on the menu",
+      "updated_at": "2018-06-20T11:29:01+02:00"
+    }
+  ],
+  "debug": {
+    "elapsed": 120000,
+    "issued_at": 1529843640000000,
+    "resolved_at": 1529843640120000
+  },
 }
 ```
 
-[back to summary](#summary)
-### Possible values for the request attribute
-This values are included in REST schema.
-- `get`: represent the request for getting a resource or a list of resource
-- `post`: represent the request for creating a resource
-- `put`: represent the request for updating a resource. If you send a `PATCH` request, the value of the `request` attribute should still be `PUT` as the comunity seems to accept both as the action of updating a resource. This rule is set up in order to keep the most consitency possible.
-- `delete`: represent the request for deleting a resource
+### In-depth attributes overview
 
-[back to summary](#summary)
-### Possible values for the status attribute
-- `successs`: the request succeeded and has the expected effect on the resource
-- `fail`: the request failed the different filtering/validation mecanism on the request values
-- `error`: the request failed due to a server-side error (database outage, violation of a table constraint, ...)
+- [message](#message)
+- [request](#request)
+- [data](#data)
+- [debug](#debug)
 
-[back to summary](#summary)
-### Note on the requested attribute
-This represents, in **milliseconds**, the time when the server-side script begins to process the request. The best option to represent this value is to immediately create the variable responsible to log the current millisecond timstamp before any process (if possible).
-### Note on the resolved attribute
-This represents the time in **milliseconds** when the API is about to send the response back to the consumer system. This should be the last - 1 statement of your server-side code, right before the code that will send the response to the consumer back. A tips is given to make this the most relevant data possible in the [Advice on how to implement this standard](#advice-on-how-to-implement-this-standard) section to help you implement this.
-### Note on the elapsed attribute
-This represents the time in **milliseconds** the script last to process the request. It simply is the difference between the `requested` and the `resolved` milliseconds timestamps, as they wrap any process that has helped to get the excpected result or effect to the resource. A tips is given to automatically compute this data in the [Advice on how to implement this standard](#advice-on-how-to-implement-this-standard) section to help you simply implement this.
+#### message
 
-[back to summary](#summary)
-### Notes on the message attribute
-It can be anything that help the **end user** to know what happened of his initial request.
-#### Success message
-This should be as simple as possible, and inform the user that the resource have been successfuly altered.
-#### Fail message
-This should be as precise as possible, and inform the user that one of the values of his input request was wrong. The recommendation is to display only the first error if multiple values are wrong, as the user will not read everything if you throw every errors. Web experience should be fast, concise, and clear.
-#### Error message
-Do not throw the exact database driver error or any other system error ! This practice is a huge security breach and could inform bad guys how your system works/is built. Simply display a general error. Here is a suggestion of general error to give your end-user : "an error occured while trying to name of the action your data".
+This is the right place to inform the end user of what is happening with his request. 
 
-[back to summary](#summary)
-### Notes on the code attribute
-The code should be your way to debug the system in case of an error. It can be given to your end user as you still are the only one that can decrypt your error codes.
-#### In case of success
-This code should remain at `0`.
-#### In case of a failure
-This code should be negative and lower than zero. For example, if the attribute `password` and `password_confirm` are not equal, you can throw `-1`. If the password is empty, you could throw `-2`. Another example could be to detect if your database throws a duplicate constraint error. This error could be identifyied as a database, so an error, but as it impact the input values, this is considered a validation error in this case. Eventually, try to be the most specific possible. This is a time loosing job, but trust me when you need to debug your API after 3 month of production, it comes really useful (with the good documentation along of course).
-#### In case of an error
-This code should be positive and greater than zero. Same rule, try to be the most specific and identifiy each different scenario. However, as there is a tons of system error message, the correct way to do is to only detect the most frequent errors. For example, in MySQL you can have thousands of errors codes. But if you only focus on the main errors, like a foreign key constraint violation (1062), and a database outage, you drastically reduce the number of codes to create. Think smart for this case and be consistent, always to make the debugging easier.
+The user can be a developer, but also a non-developer like a customer in a shop website. So this message should be targeted to offer a good comprehension, **without** exposing sensible information about the server or any other critical data.
 
-[back to summary](#summary)
-### Notes on the data attribute
-This is where your resource should be inserted. Ideally, all the request types (`POST`, `GET`, `PUT`, `DELETE`) should return a non empty data. 
-#### In case of a GET
-Return the single or the list of resources requested.
-#### In case of a POST
-Return the resource your system have created.
-#### In case of a PUT
-Alter the resource, and then GET the resource. It can double the time of your API to responds, but it is useful in the case of a concurrent UPDATE.
-#### In case of a DELETE
-GET the information of the resource, and then DELETE it. You can then return the information of the deleted resource.
+### request
 
-[back to summary](#summary)
+This is the attribute that saves the type of request that have been processed. This attribute can help developers in 2 ways:
 
-## Advice on how to implement this standard
-- Use constants to define the different values of attributes : if you create your class, set some constants to help the end developper
-- Implement a parser : The rule of this parser should be strictly leaded by the presence of all the 8 attributes and their possible values. JUR has been made by thinking of the most uniform data possible, thus making the construction of a parser a breeze. Further version of this documentation should include a pseudo-code algorithm to help implement this parser
-- Real-life example : You can find a PHP example of implementation (a little bit hard if you do not do advanced PHP) but this really gives you good hints on how to implement this standard. You can find here : [https://github.com/khalyomede/php-jur/tree/master/src](https://github.com/khalyomede/php-jur/tree/master/src)
-- For the `resolved` attribute, you could make the class or the function that send back the response to automatically compute the millisecond timestamp, thus computing right after the `elapsed` value in milliseconds. This can be a good thing in term of Developer Experience. Further version of this documentation should include a pseudo-code algorithm to help you understand how to simply implement this.
+- verify its request have been understood by the server (if the developer intended to make a GET request, but the server ended up processing a PUT request, there is an issue)
+- help the front-end developer process the message regarding the type of request (styling, ...)
 
-## Attributes cheat sheat
-| Attribute | Descriptive | Possibles types | Possibles values or example |
-|-----------|------------------------------------------------|----------------------------------------------------|-----------------------------------------------|
-| request | type of the request | string | "get", "post", "put", "delete" |
-| status | status informing the request state | string | "success", "fail", "error" |
-| requested | processing request start timestamp in milliseconds | integer | 1501358977073 |
-| resolved | processing request end timestamp in milliseconds | integer | 1501359003992 |
-| elapsed | processing request duration in milliseconds | integer | 919 |
-| message | request status to be delivered to the end user | string | "user John Doe have been successfully stored" |
-| code | request status code for the end developper | integer | 7, -1, 0 |
-| data | processed data for the end developper | string, number, JSON object, array, boolean, null | { "firstName": "John", "lastName": "Doe" } |
+### data
 
-[back to summary](#summary)
-## Semantic Version ready
-This documentation follows the [semantic versioning guidelines](http://semver.org/) v2.0.0 that ensure every step we engage, by adding new functionalities or providing bug fixes, follows these guide and make your job easier by trusting this documentation as versioningly stable.
+This is the attribute where all the necessary data to provide are stored. It can be set to null when there is no data to return, which is different than the absence of result (which would be an empty array/object).
 
-[back to summary](#summary)
+### debug
+
+This is the attribute designed for the consumer of the API. It let you know when the request has been issued and resolved according to the server, and how many time did the server took to resolve this request.
+
+**elapsed**
+
+The time elapsed by the controller to resolved the request. In **microseconds**.
+
+**issued_at**
+
+The time at which the request has been handled by the controller. Timestamp in **microseconds**.
+
+**resolved_at**
+
+The time at which the request has been resolved by the controller. Timestamp in **microseconds**.
+
+## Tips
+
+- [Use the debug information to monitor latency](#use-the-debug-information-to-monitor-latency)
+- [Version your routes](#version-your-routes)
+- [Internationalize your routes](#internationalize-your-routes)
+
+### Use the debug information to monitor latency
+
+One interesting thing about the debug attribute is that you can use it to compute latency between the time your client sent the request until the moment the controller is about to start resolving the request. 
+
+_Keep in mind the request could also go through many layers like framework middlewares, CDNs, ... All of these should be taken into an account._
+
+So for example in Javascript we could compute this like this:
+
+```html
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+    const client_issued_at = Date.now() + new Date().getMilliseconds();
+
+    fetch('/api/task', { method: 'POST', body: JSON.stringify({ name: 'rework JUR standard' }) }).then(function(response) {
+      const resp = response.json();
+      const sever_issued_at = resp.debug.issued_at;
+      const latency = client_issued_at - server_issued_at;
+
+      alert(resp.message + 'saved in ' + Math.round(resp.debug.elapsed / 1000) + 'ms (+ ' + Math.round(latency) + 'ms)');
+    });
+  });
+</script>
+```
+
+Which would return to the client an alert with the following message:
+
+```
+Task "rework JUR standard" successfuly saved in 120ms (+ 90ms)
+```
+
+### Version your routes
+
+In case of a breaking change in your tables, you might want to version your API to not force all your front-end developper to immediately change their code. Simply add a `v1`, to your routes.
+
+### Internationalize your routes
+
+As the message attribute is intended for being displayed to the end user, you will also want to personalize the message regarding the locale of the device. For this, I propose you to add the locale in the route like:
+
+- `/api/v1/en-us/task`
+- `/api/v1/fr-fr/configuration/notification`
+- ...
+
+Specifying the locale in the route instead of on the header or the body/query parameters has the advantage of making this a requirement more than an option, so it is allow the back-end developer to have less verification to do or remove some tasks (like having to split by `;` the language of the `Accept-Language` header, in case there is multiple language, or to interpret `*` and having to fetch the default language, ...).
+
+## Attributes cheat-sheet
+
+| attribute   | parent | type        | format      | example                                                                             |
+|-------------|--------|-------------|-------------|-------------------------------------------------------------------------------------|
+| message     |        | string|null |             | "Task created successfuly."                                                         |
+|             |        |             |             | null                                                                                |
+| request     |        | string      |             | get                                                                                 |
+|             |        |             |             | post                                                                                |
+|             |        |             |             | put                                                                                 |
+|             |        |             |             | patch                                                                               |
+|             |        |             |             | delete                                                                              |
+| data        |        | *           |             | [{"id": 1, "name": "Do the dishes"}, {"id": 2, "name": "Buy catnips"}]              |
+|             |        |             |             | null                                                                                |
+|             |        |             |             | {"lat": 48.8773406, "lng": "2.327774"}                                              |
+| debug       |        | object      |             | {"elapsed": 120000, "isued_at": 1529843640000000, "resolved_at": 1529843640120000"} |
+| elapsed     | debug  | integer     | microsecond | 120000                                                                              |
+| issued_at   | debug  | integer     | microsecond | 1529843640000000                                                                    |
+| resolved_at | debug  | integr      | microsecond | 1529843640120000                                                                    |
