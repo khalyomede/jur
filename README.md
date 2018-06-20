@@ -193,7 +193,7 @@ const client_issued_at = Date.now() + new Date().getMilliseconds();
 fetch('/api/task', { method: 'POST', body: JSON.stringify({ name: 'rework JUR standard' }) }).then(function(response) {
   const resp = response.json();
   const sever_issued_at = resp.debug.issued_at;
-  const latency = client_issued_at - server_issued_at;
+  const latency = server_issued_at - client_issued_at;
 
   alert(resp.message + 'saved in ' + Math.round(resp.debug.elapsed / 1000) + 'ms (+ ' + Math.round(latency) + 'ms)');
 });
