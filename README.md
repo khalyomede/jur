@@ -72,7 +72,7 @@ The user can be a developer, but also a non-developer like a customer in a shop 
 
 This is the attribute that saves the type of request that have been processed. This attribute can help developers in 2 ways:
 
-- verify its request have been understood by the server (if the developer intended to make a GET request, but the server ended up processing a PUT request, there is an issue)
+- verify if its request have been understood by the server (if the developer intended to make a GET request, but the server ended up processing a PUT request, there is an issue)
 - help the front-end developer process the message regarding the type of request (styling, ...)
 
 #### data
@@ -97,9 +97,44 @@ The time at which the request has been resolved by the controller. Timestamp in 
 
 ## Tips
 
+- [Check for errors](#check-for-errors)
 - [Use the debug information to monitor latency](#use-the-debug-information-to-monitor-latency)
 - [Version your routes](#version-your-routes)
 - [Internationalize your routes](#internationalize-your-routes)
+
+### Check for errors
+
+If you have seen the version 1, you will notice there is no `status` (`success`, `fail` or `error`).
+
+You can now check for errors using the correct manner, which is to check on the HTTP status code of the request.
+
+Here is an example of a simple error management using javascript:
+
+```javascript
+fetch('/api/task', { method: 'POST', body: JSON.stringify({name: 'Do the dishes'}) }).then(function(response) {
+  if( ! response.ok ) {
+    handleErrors(response.status, response.json().message);
+  }
+
+  return response;
+}).then(function(response) {
+  // process the response as usual
+});
+```
+
+And in our `handleErrors` function:
+
+```javascript
+function handleErrors(code, message) {
+  switch(code) {
+    case 400:
+      // display an alert in orange
+    case 500:
+      // display an error in red
+    // ...
+  }
+}
+```
 
 ### Use the debug information to monitor latency
 
@@ -109,20 +144,16 @@ _Keep in mind the request could also go through many layers like framework middl
 
 So for example in Javascript we could compute this like this:
 
-```html
-<script type="text/javascript">
-  document.addEventListener('DOMContentLoaded', function() {
-    const client_issued_at = Date.now() + new Date().getMilliseconds();
+```javascript
+const client_issued_at = Date.now() + new Date().getMilliseconds();
 
-    fetch('/api/task', { method: 'POST', body: JSON.stringify({ name: 'rework JUR standard' }) }).then(function(response) {
-      const resp = response.json();
-      const sever_issued_at = resp.debug.issued_at;
-      const latency = client_issued_at - server_issued_at;
+fetch('/api/task', { method: 'POST', body: JSON.stringify({ name: 'rework JUR standard' }) }).then(function(response) {
+  const resp = response.json();
+  const sever_issued_at = resp.debug.issued_at;
+  const latency = client_issued_at - server_issued_at;
 
-      alert(resp.message + 'saved in ' + Math.round(resp.debug.elapsed / 1000) + 'ms (+ ' + Math.round(latency) + 'ms)');
-    });
-  });
-</script>
+  alert(resp.message + 'saved in ' + Math.round(resp.debug.elapsed / 1000) + 'ms (+ ' + Math.round(latency) + 'ms)');
+});
 ```
 
 Which would return to the client an alert with the following message:
