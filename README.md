@@ -3,6 +3,7 @@
 JSON Uniform Response
 
 [![GitHub tag](https://img.shields.io/github/tag/khalyomede/jur.svg)]()
+[![Reading time](https://img.shields.io/badge/read%20time-6%20mins-lightgrey.svg)]()
 
 ## Summary
 
