@@ -131,9 +131,7 @@ use App\Task;
 
 class TaskController extends Controller {
   public function index(): string {
-    $response = jur()->issued()->request('get')->data( Task::all() );
-
-    return response()->json( $response->resolved()->toArray() );
+    return response()->json( jur()->data( Task::all() )->toArray() );
   }
 }
 ```
