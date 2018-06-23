@@ -101,7 +101,7 @@ The time at which the request has been resolved by the controller. Timestamp in 
 
 This example features:
 
-- Javascript: for the step of sending the request/consuming the response
+- khalyomede/jur-js: for the step of sending the request/consuming the response
 - Laravel (PHP): for the step of processing the request
 - khalyomede/jur (PHP): the package that help form the JUR response
 
@@ -114,10 +114,12 @@ We are in the context of a task application, and the user is displaying the task
 
 ```html
 <script type="text/javascript">
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function() {   
     fetch('/api/task', { method: 'GET' }).then(function(response) {
-      if( response.ok ) {
-        console.log(response.json().data);
+      if( resp.ok ) {
+        let response = new Jur().parse(response.json());
+
+        console.log(response.data());
       }
     });
   });
