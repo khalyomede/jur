@@ -205,6 +205,26 @@ Which would return to the client an alert with the following message:
 Task "rework JUR standard" successfuly saved in 120ms (+ 90ms)
 ```
 
+**Note**
+
+You can also use existing third-party library that implements such behavior, like [khalyomede/jur-js](https://github.com/khalyomede/jur-js), which make this job easier:
+
+```javascript
+var jur = new Jur().issued();
+
+fetch('/api/task', { method: 'POST', body: JSON.stringify({ name: 'rework JUR standard' }) }).then(function(response) {
+  jur.parse(response.json());
+
+  alert(jur.message() + ' Done in ' + jur.elapsed('millisecond') + 'ms (+' + jur.latency('millisecond') + 'ms).');
+});
+```
+
+Which will display:
+
+```
+Task saved. Done in 120ms (+68ms).
+```
+
 ### Version your routes
 
 In case of a breaking change in your tables, you might want to version your API to not force all your front-end developper to immediately change their code. Simply add a `v1`, to your routes.
