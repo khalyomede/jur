@@ -12,6 +12,7 @@ JSON Uniform Response
 - [Real life example](#real-life-example)
 - [Tips](#tips)
 - [Attributes cheat sheet](#attributes-cheat-sheet)
+- [List of libraries that implement JUR](#list-of-libraries-that-implement-jur)
 
 You are watching version 2, which supersedes the previous version. Version 1 is no longer maintened (you can still access it through the tag menu right above).
 
@@ -236,3 +237,12 @@ Specifying the locale in the route instead of on the header or the body/query pa
 | elapsed     | debug  | integer     | microsecond | 120000                                                                              |
 | issued_at   | debug  | integer     | microsecond | 1529843640000000                                                                    |
 | resolved_at | debug  | integr      | microsecond | 1529843640120000                                                                    |
+
+## List of libraries that implement JUR
+
+- PHP
+  - [khalyomede/php-jur](https://github.com/khalyomede/php-jur)
+- Javascript
+  - [khalyomede/jur-js](https://github.com/khalyomede/jur-js)
+
+Made an implementation? Please fill in an issue and I will add it to the list (or make a Pull Request for this).
