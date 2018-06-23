@@ -195,14 +195,14 @@ fetch('/api/task', { method: 'POST', body: JSON.stringify({ name: 'rework JUR st
   const sever_issued_at = resp.debug.issued_at;
   const latency = server_issued_at - client_issued_at;
 
-  alert(resp.message + 'saved in ' + Math.round(resp.debug.elapsed / 1000) + 'ms (+ ' + Math.round(latency) + 'ms)');
+  alert(resp.message + '. Done in ' + Math.round(resp.debug.elapsed / 1000) + 'ms (+ ' + Math.round(latency) + 'ms).');
 });
 ```
 
 Which would return to the client an alert with the following message:
 
 ```
-Task "rework JUR standard" successfuly saved in 120ms (+ 90ms)
+Task saved. Done in 120ms (+ 90ms).
 ```
 
 **Note**
@@ -222,7 +222,7 @@ fetch('/api/task', { method: 'POST', body: JSON.stringify({ name: 'rework JUR st
 Which will display:
 
 ```
-Task saved. Done in 120ms (+68ms).
+Task saved. Done in 120ms (+90ms).
 ```
 
 ### Version your routes
