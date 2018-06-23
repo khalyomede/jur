@@ -223,7 +223,7 @@ Specifying the locale in the route instead of on the header or the body/query pa
 
 | attribute   | parent | type        | format      | example                                                                             |
 |-------------|--------|-------------|-------------|-------------------------------------------------------------------------------------|
-| message     |        | string|null |             | "Task created successfuly."                                                         |
+| message     |        | string,null |             | "Task created successfuly."                                                         |
 |             |        |             |             | null                                                                                |
 | request     |        | string      |             | get                                                                                 |
 |             |        |             |             | post                                                                                |
